@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Online</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <header class="header-section">
+        <div class="top-banner-container">
+            <img id="banner-topo-img" src="" alt="Banner do Estabelecimento" />
+        </div>
+
+        <div class="business-info-container">
+            <div class="container">
+                <img id="logo-negocio" src="" alt="Logo do Negócio" class="logo-negocio-img" />
+                
+                <div class="business-details">
+                    <h1 id="nome-negocio" class="header-title"></h1>
+                    <p id="descricao-negocio" class="header-description"></p>
+                    <p id="endereco-negocio" class="header-address"></p>
+                    <div class="contact-info">
+                        <p id="contato-negocio" class="header-contact"></p>
+                        <div id="social-media-container" class="social-media-container"></div>
+                    </div>
+                    <div class="header-status-wrapper">
+                        <div id="store-status-container" class="store-status-container"></div>
+                        <div id="store-status-details" class="store-status-details"></div>
+                    </div>
+                </div>
+
+                <div id="header-cart-button" class="header-cart-button" onclick="toggleCart()">
+                    <i class="fa-solid fa-shopping-bag"></i>
+                    <span class="cart-counter-span">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <section class="menu-options-container">
+                <nav id="category-buttons" class="category-nav"></nav>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Pesquisar por nome...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="sort-container">
+                    <label for="sort-options">Ordenar por:</label>
+                    <select id="sort-options">
+                        <option value="padrao">Padrão</option>
+                        <option value="nome-asc">Nome (A-Z)</option>
+                        <option value="nome-desc">Nome (Z-A)</option>
+                        <option value="preco-asc">Preço (Menor para Maior)</option>
+                        <option value="preco-desc">Preço (Maior para Menor)</option>
+                    </select>
+                </div>
+            </section>
+
+            <section id="banner-carousel-section" class="banner-carousel-section" style="display: none;">
+                <div id="banner-carousel-container" class="banner-carousel-container">
+                    </div>
+            </section>
+            
+            <section id="favoritos-container" style="display: none;">
+                <h2 class="section-title"><i class="fas fa-heart" style="color: var(--favorite-color);"></i> Seus Favoritos</h2>
+                <div id="favoritos-grid" class="menu-grid">
+                    </div>
+            </section>
+
+            <section id="destaques-container" style="display: none;">
+                <h2 class="section-title">Destaques</h2>
+                <div id="destaques-grid" class="menu-grid">
+                    </div>
+            </section>
+
+            <h2 class="section-title" id="menu-title">Nosso Cardápio</h2>
+
+            <div id="menu-container" class="menu-grid">
+                <div id="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>Carregando cardápio...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Meu Carrinho</h3>
+            <button class="cart-close-btn" onclick="toggleCart()">&times;</button>
+        </div>
+        <div id="cart-items-container" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total:</strong>
+                <span id="cart-total-price">R$ 0,00</span>
+            </div>
+            <button id="checkout-btn" class="checkout-btn" disabled>Finalizar Pedido</button>
+            <button id="clear-cart-btn" class="clear-cart-btn">Limpar Carrinho</button>
+        </div>
+    </aside>
+
+    <div id="cart-float-button" class="cart-float-button" onclick="toggleCart()">
+        <i class="fa-solid fa-shopping-bag"></i>
+        <span class="cart-counter-span">0</span>
+    </div>
+
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeCheckoutModal()">&times;</button>
+            <h2>Finalizar Pedido</h2>
+            
+            <div id="delivery-options-container" class="checkout-step"></div>
+            
+            <div class="checkout-step">
+                <h4>2. Seus Dados</h4>
+                <label for="customer-name">Seu nome:</label>
+                <input type="text" id="customer-name" placeholder="Digite seu nome" required>
+                <div id="whatsapp-container">
+                    <label for="customer-whatsapp">Seu WhatsApp:</label>
+                    <input type="tel" id="customer-whatsapp" placeholder="Opcional para retirada / Obrigatório para delivery" required>
+                </div>
+            </div>
+
+            <div id="mesa-container" class="checkout-step" style="display: none;">
+                <h4>3. Qual o número da sua Mesa?</h4>
+                <label for="customer-mesa-number">Número da Mesa:</label>
+                <input type="number" id="customer-mesa-number" placeholder="Digite o número da mesa" required>
+            </div>
+            
+            <div id="address-container" class="checkout-step" style="display: none;">
+                <h4>3. Endereço de Entrega</h4>
+                <label for="customer-neighborhood">Bairro:</label>
+                <select id="customer-neighborhood" class="address-input" onchange="updateCheckoutSummary()"></select>
+                <label for="customer-street-address">Rua, Número e Complemento:</label>
+                <input type="text" id="customer-street-address" class="address-input" placeholder="Ex: Rua das Flores, 123, Apto 4B" required>
+                <label for="customer-reference">Ponto de Referência (Opcional):</label>
+                <input type="text" id="customer-reference" class="address-input" placeholder="Ex: Próximo à padaria, em frente ao posto">
+            </div>
+
+            <div id="payment-options-container" class="checkout-step"></div>
+            
+            <div id="pix-details-container" class="pix-details" style="display: none;">
+                <p class="pix-instruction">Copie a chave PIX para pagar e envie o comprovante no WhatsApp.</p>
+                <p id="pix-info-display" class="pix-info"></p>
+                <div id="pix-key-display" class="pix-key"></div>
+                <p id="pix-copy-feedback" class="pix-copy-text">Clique na chave para copiar</p>
+            </div>
+
+            <div id="change-container" class="checkout-step" style="display: none;">
+                <h4>5. Troco (para pagamento em Dinheiro)</h4>
+                <label for="change-for-amount">Precisa de troco para quanto?</label>
+                <input type="tel" inputmode="decimal" id="change-for-amount" placeholder="Ex: R$ 50,00">
+                <div class="radio-option">
+                    <input type="checkbox" id="no-change-needed">
+                    <label for="no-change-needed">Não preciso de troco</label>
+                </div>
+            </div>
+            
+            <div id="coupon-container" class="checkout-step">
+                <h4>6. Cupom de Desconto (Opcional)</h4>
+                <div class="coupon-wrapper">
+                    <input type="text" id="coupon-input" placeholder="Digite seu cupom">
+                    <button id="apply-coupon-btn">Aplicar</button>
+                </div>
+                <p id="coupon-feedback" class="coupon-feedback"></p>
+            </div>
+            
+            <div class="checkout-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="summary-subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row" id="summary-discount-row" style="display: none;">
+                    <span>Desconto:</span>
+                    <span id="summary-discount">R$ 0,00</span>
+                </div>
+                <div class="summary-row" id="summary-delivery-row" style="display: none;">
+                    <span>Taxa de Entrega:</span>
+                    <span id="summary-delivery-fee">R$ 0,00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <strong>Total a Pagar:</strong>
+                    <strong id="summary-total">R$ 0,00</strong>
+                </div>
+            </div>
+
+            <button id="finalize-order-btn" class="btn-primary">Enviar Pedido via WhatsApp</button>
+        </div>
+    </div> 
+
+    <div id="item-detail-modal" class="modal-overlay">
+        <div class="modal-content" id="item-detail-content">
+        </div>
+    </div>
+
+    <div id="order-success-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Pedido Enviado!</h2>
+            <p>Seu pedido foi enviado. Você será redirecionado para o WhatsApp para confirmar. Obrigado pela preferência!</p>
+            <button id="close-success-modal-btn" class="btn-primary">Fechar</button>
+        </div>
+    </div>
+
+    <div id="popup-notice-modal" class="modal-overlay">
+        <div class="modal-content popup-content">
+            <button class="modal-close-btn" onclick="closePopupNoticeModal()">&times;</button>
+            <div id="popup-notice-content-wrapper">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© <span id="footer-year"></span> <span id="footer-business-name"></span>. Todos os direitos reservados.</p>
+            <p class="footer-credit">Desenvolvido com ❤️ por <a href="https://menu.pro.br" target="_blank">menupro</a>.</p>
+        </div>
+    </footer> 
+     
+    <script src="script.js"></script>
+</body>
+</html>
